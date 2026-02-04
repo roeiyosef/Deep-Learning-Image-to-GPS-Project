@@ -58,7 +58,7 @@ This is the original dataset format as required by the submission guidelines, an
     1. Download and unzip to `data/raw/`.
     2. **Preprocessing Required:** You must run the preprocessing script to generate the smart zones and handle GPS noise before training.
     ```bash
-    python preprocess.py  # Generates the compatible gt.csv
+    python preprocess.py  # Generates a new preprocessed folder with the processed photos and the newly updated CSV
     ```
 
 **Final Project Structure:**
