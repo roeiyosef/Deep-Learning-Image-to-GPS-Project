@@ -31,11 +31,10 @@ The model processes a standard $224 \times 224$ input image through a **ResNet50
     Directly predicts the precise $(x, y)$ coordinates using **MSE Loss**. This head focuses on minimizing the meter-level distance error.
 
 *   ** Classification Head (Global Context):**
-    Classifies the image into one of **300 "Smart Zones"** (generated via K-Means clustering). This provides a coarse location estimate and prevents "mean location collapse" by enforcing commitment to a specific neighborhood [1].
+    Classifies the image into one of **300 "Smart Zones"** (generated via K-Means clustering). This provides a global context.
 
-*   ** Embedding Head (Metric Learning):**
-    Projects the image into a metric space optimized via **Triplet Loss** with **Hard Negative Mining**. This head learns to distinguish between visually similar but geographically distant locations (solving the "Visual Aliasing" problem) [2, 3].
-
+*   ** Embedding Head: **
+    Extracts compact embeddings that serve as input for the **Triplet Loss**. We use **Hard Negative Mining** on these embeddings to separate confusing scenes that look alike but are far apart.
 ---
 
 ## 📥 Data & Model Setup (Crucial Step)
