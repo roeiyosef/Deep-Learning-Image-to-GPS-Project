@@ -1,4 +1,4 @@
-# 📍 Campus Image-to-GPS Localization (Project 4)
+Campus Image-to-GPS Localization (Project 4)
 ### Visual Place Recognition using Multi-Task "Trinity" Architecture
 
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.0-ee4c2c?logo=pytorch)](https://pytorch.org/)
@@ -59,7 +59,7 @@ This is the original dataset format as required by the submission guidelines.
     python preprocess.py  # Generates the compatible gt.csv
     ```
 
-**Final Directory Structure:**
+**Final Project Structure:**
 ```text
 Campus_GPS_Project/
 ├── best_model.pth          <-- Downloaded Model
@@ -71,19 +71,23 @@ Campus_GPS_Project/
     └── gt.csv              <-- Downloaded/Generated CSV
 ```
 
----
-## 🛠️ Environment SetupTo replicate our results, please strictly follow these steps to create a clean Conda environment with the required dependencies (including utm and pillow-heif).Bash# 1. Create a clean environment with Python 3.9
+
+## 🛠️ Environment Setup
+To replicate our results, please strictly follow these steps to create a clean Conda environment with the required dependencies (including `utm` and `pillow-heif`).
+
+```bash
+# 1. Create a clean environment with Python 3.9
 conda create -n gps_project python=3.9 -y
 
-### 2. Activate the environment
+# 2. Activate the environment
 conda activate gps_project
 
-### 3. Install required dependencies
+# 3. Install required dependencies
 pip install -r requirements.txt
 
-### 4. Sanity Check (Optional)
+# 4. Sanity Check (Optional)
 python -c "import utm; import pillow_heif; print('✅ Setup Complete!')"
-
+```
 ---
 ## 🧠 The "Trinity" ArchitectureThe model 
 processes a 224x224 image through a ResNet50 backbone injected with Spatial Dropout layers, branching into three task-specific heads:Regression Head (MSE): Predicts the precise $(x, y)$ coordinates.Classification Head (Cross-Entropy): Classifies the image into one of 300 Smart Zones (generated via K-Means) to provide global context.Embedding Head (Triplet Loss): Learns a metric space where visually similar but geographically distant locations (aliasing) are pushed apart using Hard Negative Mining.🚀 How to Run1. TrainingTo train the model from scratch (ensure you followed "Data Setup Option A"):Bashpython train.py
