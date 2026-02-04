@@ -78,8 +78,10 @@ This is the original dataset format as required by the submission guidelines, an
 Campus_GPS_Project/
 ├── best_model.pth          <-- Downloaded Model
 ├── predict.py
+├── model.py
 ├── train.py
 ├── preprocess.py           <-- (Only if using Raw Data)
+├── requirements.txt
 └── data/
     ├── images/             <-- Downloaded Images
     └── gt.csv              <-- Downloaded/Generated CSV
