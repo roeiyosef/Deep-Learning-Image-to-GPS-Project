@@ -24,6 +24,18 @@ Regression Head (MSE): Predicts the precise $(x, y)$ coordinates.
 Classification Head (Cross-Entropy): Classifies the image into one of 300 Smart Zones (generated via K-Means) to provide global context.
 Embedding Head (Triplet Loss): Learns a metric space where visually similar but geographically distant locations (aliasing) are pushed apart using Hard Negative Mining.
 
+###  The model 
+The model processes a standard $224 \times 224$ input image through a **ResNet50 backbone**, which we fine-tuned and injected with **Spatial Dropout** layers to enhance feature robustness. The extracted feature vector branches into three parallel, task-specific heads:
+
+*   ** Regression Head (Geometric Precision):**
+    Directly predicts the precise $(x, y)$ coordinates using **MSE Loss**. This head focuses on minimizing the meter-level distance error.
+
+*   ** Classification Head (Global Context):**
+    Classifies the image into one of **300 "Smart Zones"** (generated via K-Means clustering). This provides a coarse location estimate and prevents "mean location collapse" by enforcing commitment to a specific neighborhood [1].
+
+*   ** Embedding Head (Metric Learning):**
+    Projects the image into a metric space optimized via **Triplet Loss** with **Hard Negative Mining**. This head learns to distinguish between visually similar but geographically distant locations (solving the "Visual Aliasing" problem) [2, 3].
+
 ---
 
 ## 📥 Data & Model Setup (Crucial Step)
