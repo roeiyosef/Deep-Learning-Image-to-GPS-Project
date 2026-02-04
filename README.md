@@ -94,7 +94,7 @@ pip install -r requirements.txt
 ### 🚀 How to Run
 #### 1. Training To train the model from scratch (ensure you followed "Data Setup Option A"):
 ``` bash
- train.py
+ python train.py
 ```
 #### 2. Inference (Evaluation) We provide a standalone function predict_gps that accepts a numpy array image and returns coordinates.
 
