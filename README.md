@@ -75,13 +75,13 @@ Campus_GPS_Project/
 ## 🛠️ Environment SetupTo replicate our results, please strictly follow these steps to create a clean Conda environment with the required dependencies (including utm and pillow-heif).Bash# 1. Create a clean environment with Python 3.9
 conda create -n gps_project python=3.9 -y
 
-# 2. Activate the environment
+### 2. Activate the environment
 conda activate gps_project
 
-# 3. Install required dependencies
+### 3. Install required dependencies
 pip install -r requirements.txt
 
-# 4. Sanity Check (Optional)
+### 4. Sanity Check (Optional)
 python -c "import utm; import pillow_heif; print('✅ Setup Complete!')"
 
 ---
@@ -91,12 +91,12 @@ Note: The script automatically handles weighted sampling, data loading, and vali
 from PIL import Image
 from predict import predict_gps
 
-# Load an image
+### Load an image
 img_path = "data/images/some_campus_image.jpg"
 image = np.array(Image.open(img_path))
 
-# Predict
-# Returns: np.array([latitude, longitude], dtype=float32)
+### Predict
+Returns: np.array([latitude, longitude], dtype=float32)
 coords = predict_gps(image)
 
 print(f"Predicted Location: {coords}")
