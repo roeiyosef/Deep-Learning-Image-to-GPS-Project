@@ -14,10 +14,9 @@ We have deployed our model to **Hugging Face Spaces**. You can upload any image 
 ---
 
 
-## 📖 Overview
-This repository contains a deep learning solution for **Image-to-GPS Regression**. The goal is to predict the precise real-world location (Latitude, Longitude) of a photo taken within the university campus, utilizing only visual features.
+## Overview
+In this repository is a deep learning solution for **Image-to-GPS Regression**. The goal is to predict the precise real-world location (Latitude, Longitude) of a photo taken within the university campus, utilizing only visual features.
 
-Addressing the "Multipath Effect" challenge in urban canyons—where standard GPS signals deviate by 10-20 meters—our model achieves a state-of-the-art mean error of **8.68 meters**, effectively overcoming visual aliasing and extreme lighting variations.
 
 ## The model 
 processes a 224x224 image through a ResNet50 backbone injected with Spatial Dropout layers, branching into three task-specific heads:
