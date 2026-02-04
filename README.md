@@ -72,7 +72,7 @@ Campus_GPS_Project/
 ```
 
 
-🛠️ Environment SetupTo replicate our results, please strictly follow these steps to create a clean Conda environment with the required dependencies (including utm and pillow-heif).Bash# 1. Create a clean environment with Python 3.9
+## 🛠️ Environment SetupTo replicate our results, please strictly follow these steps to create a clean Conda environment with the required dependencies (including utm and pillow-heif).Bash# 1. Create a clean environment with Python 3.9
 conda create -n gps_project python=3.9 -y
 
 # 2. Activate the environment
@@ -83,7 +83,9 @@ pip install -r requirements.txt
 
 # 4. Sanity Check (Optional)
 python -c "import utm; import pillow_heif; print('✅ Setup Complete!')"
-🧠 The "Trinity" ArchitectureThe model processes a 224x224 image through a ResNet50 backbone injected with Spatial Dropout layers, branching into three task-specific heads:Regression Head (MSE): Predicts the precise $(x, y)$ coordinates.Classification Head (Cross-Entropy): Classifies the image into one of 300 Smart Zones (generated via K-Means) to provide global context.Embedding Head (Triplet Loss): Learns a metric space where visually similar but geographically distant locations (aliasing) are pushed apart using Hard Negative Mining.🚀 How to Run1. TrainingTo train the model from scratch (ensure you followed "Data Setup Option A"):Bashpython train.py
+
+
+## 🧠 The "Trinity" ArchitectureThe model processes a 224x224 image through a ResNet50 backbone injected with Spatial Dropout layers, branching into three task-specific heads:Regression Head (MSE): Predicts the precise $(x, y)$ coordinates.Classification Head (Cross-Entropy): Classifies the image into one of 300 Smart Zones (generated via K-Means) to provide global context.Embedding Head (Triplet Loss): Learns a metric space where visually similar but geographically distant locations (aliasing) are pushed apart using Hard Negative Mining.🚀 How to Run1. TrainingTo train the model from scratch (ensure you followed "Data Setup Option A"):Bashpython train.py
 Note: The script automatically handles weighted sampling, data loading, and validation checks.2. Inference (Evaluation)We provide a standalone function predict_gps that accepts a numpy array image and returns coordinates.Example usage (Python):Pythonimport numpy as np
 from PIL import Image
 from predict import predict_gps
@@ -99,11 +101,3 @@ coords = predict_gps(image)
 print(f"Predicted Location: {coords}")
 Quick Sanity Check:Run our built-in test script to verify the model and environment:Bashpython check_submission.py
 📊 Results & AnalysisBest Validation Error: 8.68m (Epoch 127).Robustness: The model successfully handles night scenes and visual aliasing thanks to the Hard Negative Mining strategy.Error Distribution Map Blue dots: Ground Truth | Gray dots: Predictions | Red lines: Error vectors.(See full report for visualization)
-### מה הוספתי ושיניתי (הסבר קצר):
-
-1.  **Data & Model Setup (הכי חשוב):** הוספתי סקציה ענקית וברורה בהתחלה שמחלקת את ההורדה ל-3 חלקים:
-    * **מודל:** הבהרתי שחייבים להוריד אותו ידנית לתיקייה הראשית.
-    * **Option A (המומלץ):** מורידים, שמים בתיקייה ורצים.
-    * **Option B (הגלם/Raw):** הסברתי שאם בוחרים בזה, **חייבים** להריץ `python preprocess.py` קודם (הנחתי שיש לך סקריפט כזה או שאתה יכול לייצר אחד, אם אין לך סקריפט כזה, תגיד לי ואני אכתוב לך אותו בשנייה, או שתמחק את השורה הזו).
-2.  **מבנה התיקיות:** הוספתי ציור של עץ התיקיות (`tree`) כדי שהבודק יראה בדיוק איפה כל קובץ צריך לשבת.
-3.  **לינקים:** השארתי לך מקום (`[INSERT_LINK...]`) לשים את הלינקים האמיתיים שלך.
