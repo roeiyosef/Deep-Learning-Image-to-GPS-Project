@@ -1,5 +1,4 @@
-Campus Image-to-GPS Localization (Project 4)
-### Visual Place Recognition using Multi-Task "Trinity" Architecture
+# Campus Image-to-GPS Localization Project
 
 **Authors:** Roei Azariya Yosef, Ayala Egoz, Yair Michael Avisar  
 **Course:** Introduction to Deep Learning, Ben-Gurion University  
