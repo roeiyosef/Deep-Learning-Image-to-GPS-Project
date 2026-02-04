@@ -42,14 +42,16 @@ Required for `predict.py` and `check_submission.py`.
 * **Action:** Place the file in the **root directory** of the project (next to `predict.py`).
 
 ### 2. Download Dataset
+First, in the Project Folder, there is an empty folder called Data. this folder should include the images folder and the CSV.
+
 We provide two options. **Option A is recommended** for immediate reproduction of training.
 
 #### Option A: Preprocessed Data (Ready to Train)
-This version includes the processed CSV (has image_name, lat, lon, utm_x, utm_y, is_night, label)
+This version includes an images folder with the original images resized to 224*224 and contains the processed CSV (has image_name, lat, lon, utm_x, utm_y, is_night, label)
 
 * **Link:** [INSERT_LINK_TO_PROCESSED_DATA_ZIP]
 * **Action:**
-    1. Download and unzip.
+    1. Download and unzip, this folder will contain an images folder and a gt.csv.
     2 Place the `images` folder inside `data/`.
     3. Place the `gt.csv` file inside `data/`.
     4. **Status:** You can run `python train.py` immediately.
@@ -60,7 +62,7 @@ This option follows the strict submission guidelines but requires an additional 
 
 * **Link:** [INSERT_LINK_TO_RAW_DATA_ZIP]
 * **Structure:**
-    1. Download and unzip the data into `data/raw/`.
+    1. Download and unzip the data into the project folder.
     2. **Run Preprocessing:** Execute the following script to denoise GPS labels and generate Smart Zones:
     
     ```bash
@@ -71,15 +73,8 @@ This option follows the strict submission guidelines but requires an additional 
     > * `images/` (Optimized images)
     > * `gt.csv` (Updated Ground Truth with "Smart Zone" labels)
 
-    3. **Final Setup:** To use this data for training, simply move the contents of `processed_data/` into the main `data/` folder:
-    
-    ```bash
-    # Linux / Mac
-    mv processed_data/* data/
-    
-    # Windows (PowerShell)
-    Move-Item -Path "processed_data\*" -Destination "data\" -Force
-    ```
+    3. move the images folder and the gt.csv from the processed_data to the data folder
+    4.  And now you can run `python train.py`.
 
 **Final Project Structure:**
 ```text
@@ -91,7 +86,7 @@ Campus_GPS_Project/
 ├── preprocess.py           <-- (Only if using Raw Data)
 ├── requirements.txt
 └── data/
-    ├── images/             <-- Downloaded Images
+    ├── images/             <-- Images
     └── gt.csv              <-- Downloaded/Generated CSV
 ```
 
