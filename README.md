@@ -94,21 +94,25 @@ pip install -r requirements.txt
 ``` bash
  python train.py
 ```
-#### 2. Inference (Evaluation) We provide a standalone function predict_gps that accepts a numpy array image and returns coordinates.
+### 2. Inference (Evaluation)
+We provide a standalone function `predict_gps` that accepts a numpy array image and returns coordinates, exactly as required.
 
-Example usage (Python):
+**Example Usage:**
+
+```python
 import numpy as np
 from PIL import Image
 from predict import predict_gps
 
-### Load an image
+# 1. Load an image (Standard RGB)
 img_path = "data/images/some_campus_image.jpg"
-image = np.array(Image.open(img_path))
+image = np.array(Image.open(img_path).convert('RGB'))
 
-### Predict
-Returns: np.array([latitude, longitude], dtype=float32)
+# 2. Predict Coordinates
+# Returns: np.array([latitude, longitude], dtype=float32)
 coords = predict_gps(image)
 
-print(f"Predicted Location: {coords}")
-
+print(f"📍 Predicted Location: {coords}")
+# Output: [31.262345 34.803210]
+```
 ---
