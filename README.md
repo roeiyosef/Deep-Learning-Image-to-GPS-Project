@@ -1,10 +1,6 @@
 Campus Image-to-GPS Localization (Project 4)
 ### Visual Place Recognition using Multi-Task "Trinity" Architecture
 
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.0-ee4c2c?logo=pytorch)](https://pytorch.org/)
-[![Hugging Face](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Live%20Demo-yellow)](https://huggingface.co/spaces/roeitheyosef/campus-gps-locator)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-
 **Authors:** Roei Azariya Yosef, Ayala Egoz, Yair Michael Avisar  
 **Course:** Introduction to Deep Learning, Ben-Gurion University  
 **Best Validation Error:** 8.68 meters
@@ -18,10 +14,41 @@ We have deployed our model to **Hugging Face Spaces**. You can upload any image 
 
 ---
 
-## 📖 Overview
-Standard GPS signals in dense urban environments (like university campuses) suffer from the **"Multipath Effect"**, causing deviations of 10-20 meters. This project proposes a robust **Visual Place Recognition (VPR)** system that regresses precise GPS coordinates from a single monocular image.
 
-Our solution implements a novel **"Multi-Head Trinity Architecture"** based on a fine-tuned ResNet50 backbone. By simultaneously optimizing for **Coordinate Regression**, **Coarse Classification** (Smart Zones), and **Metric Learning** (Triplet Loss), we achieved a state-of-the-art mean localization error of **8.68m**.
+## 📖 Overview
+This repository contains a deep learning solution for **Image-to-GPS Regression**. The goal is to predict the precise real-world location (Latitude, Longitude) of a photo taken within the university campus, utilizing only visual features.
+
+Addressing the "Multipath Effect" challenge in urban canyons—where standard GPS signals deviate by 10-20 meters—our model achieves a state-of-the-art mean error of **8.68 meters**, effectively overcoming visual aliasing and extreme lighting variations.
+
+## 🔬 Method
+
+### **Model: The "Trinity" Architecture**
+We propose a custom **Multi-Head Network** designed to solve three complementary tasks simultaneously:
+1.  **Geometric Precision:** Exact coordinate regression.
+2.  **Global Context:** Coarse classification into topological zones.
+3.  **Visual Identity:** Metric learning to distinguish similar-looking locations (aliasing).
+
+### **Architecture**
+*   **Backbone:** ResNet50 (pre-trained on ImageNet), fine-tuned with injected **Spatial Dropout ($p=0.1$)** layers to prevent texture overfitting [1].
+*   **Heads:** The feature vector (2048-dim) branches into three parallel heads:
+    *   `Regressor`: FC layers $\to$ $(x, y)$ coordinates.
+    *   `Classifier`: FC layers $\to$ 300 "Smart Zones" (generated via K-Means) [2].
+    *   `Embedding`: FC layers $\to$ 256-dim unit vector for Triplet Learning [2].
+
+### **Training Strategy**
+*   **Dataset:** ~4,000 images collected using a grid-based "Center + Offset" protocol [3].
+*   **Preprocessing:** Manual GPS denoising (correction of sensor drift) and Smart Zoning via K-Means ($K=300$) [4, 5].
+*   **Sampling:** Implemented a **Weighted Random Sampler** to balance rare locations and Day/Night cycles [6].
+*   **Augmentations:** Adaptive Dual-View Sampling including Random Erasing (occlusions), Color Jitter (lighting), and Geometric Warping [7, 8].
+*   **Hard Negative Mining:** For the Triplet Loss, negatives are selected dynamically based on visual similarity but geographic distance [9].
+
+### **Loss Function**
+The model minimizes a weighted multi-task objective [10]:
+$$ L_{total} = 200 \cdot L_{MSE} + 0.3 \cdot L_{CE} + 10 \cdot L_{Triplet} $$
+
+*   **$L_{MSE}$ (Regression):** Penalizes geometric distance errors.
+*   **$L_{CE}$ (Classification):** Prevents "mean location collapse" by enforcing zone commitment.
+*   **$L_{Triplet}$ (Metric Learning):** Pushes visually similar but distinct locations apart (Margin=1.5).
 
 ---
 
