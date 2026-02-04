@@ -112,7 +112,7 @@ image = np.array(Image.open(img_path).convert('RGB'))
 # Returns: np.array([latitude, longitude], dtype=float32)
 coords = predict_gps(image)
 
-print(f"📍 Predicted Location: {coords}")
+print(f"Predicted Location: {coords}")
 # Output: [31.262345 34.803210]
 ```
 ---
