@@ -90,8 +90,19 @@ python -c "import utm; import pillow_heif; print('✅ Setup Complete!')"
 ```
 ---
 ## 🧠 The "Trinity" ArchitectureThe model 
-processes a 224x224 image through a ResNet50 backbone injected with Spatial Dropout layers, branching into three task-specific heads:Regression Head (MSE): Predicts the precise $(x, y)$ coordinates.Classification Head (Cross-Entropy): Classifies the image into one of 300 Smart Zones (generated via K-Means) to provide global context.Embedding Head (Triplet Loss): Learns a metric space where visually similar but geographically distant locations (aliasing) are pushed apart using Hard Negative Mining.🚀 How to Run1. TrainingTo train the model from scratch (ensure you followed "Data Setup Option A"):Bashpython train.py
-Note: The script automatically handles weighted sampling, data loading, and validation checks.2. Inference (Evaluation)We provide a standalone function predict_gps that accepts a numpy array image and returns coordinates.Example usage (Python):Pythonimport numpy as np
+processes a 224x224 image through a ResNet50 backbone injected with Spatial Dropout layers, branching into three task-specific heads:
+Regression Head (MSE): Predicts the precise $(x, y)$ coordinates.
+Classification Head (Cross-Entropy): Classifies the image into one of 300 Smart Zones (generated via K-Means) to provide global context.
+Embedding Head (Triplet Loss): Learns a metric space where visually similar but geographically distant locations (aliasing) are pushed apart using Hard Negative Mining.
+
+### 🚀 How to Run
+#### 1. Training To train the model from scratch (ensure you followed "Data Setup Option A"):
+``` bash train.py
+```
+Note: The script automatically handles weighted sampling, data loading, and validation checks.
+#### 2. Inference (Evaluation)We provide a standalone function predict_gps that accepts a numpy array image and returns coordinates.
+
+Example usage (Python):Pythonimport numpy as np
 from PIL import Image
 from predict import predict_gps
 
