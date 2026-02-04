@@ -27,13 +27,13 @@ Embedding Head (Triplet Loss): Learns a metric space where visually similar but 
 ###  The model 
 The model processes a standard $224 \times 224$ input image through a **ResNet50 backbone**, which we fine-tuned and injected with **Spatial Dropout** layers to enhance feature robustness. The extracted feature vector branches into three parallel, task-specific heads:
 
-*   ** Regression Head (Geometric Precision):**
+*   **Regression Head (Geometric Precision):**
     Directly predicts the precise $(x, y)$ coordinates using **MSE Loss**. This head focuses on minimizing the meter-level distance error.
 
-*   ** Classification Head (Global Context):**
+*   **Classification Head (Global Context):**
     Classifies the image into one of **300 "Smart Zones"** (generated via K-Means clustering). This provides a global context.
 
-*   ** Embedding Head: **
+*   **Embedding Head:**
     Extracts compact embeddings that serve as input for the **Triplet Loss**. We use **Hard Negative Mining** on these embeddings to separate confusing scenes that look alike but are far apart.
 ---
 
