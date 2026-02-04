@@ -6,23 +6,16 @@
 
 ---
 
-## 🚀 Live Demo
+## Live Demo
 We have deployed our model to **Hugging Face Spaces**. You can upload any image from the BGU campus and get its predicted location on an interactive map.
 
-👉 **[Click here to try the Live Demo](https://huggingface.co/spaces/roeitheyosef/campus-gps-locator)**
+**[Click here to try the Live Demo](https://huggingface.co/spaces/roeitheyosef/campus-gps-locator)**
 
 ---
 
 
 ## Overview
 In this repository is a deep learning solution for **Image-to-GPS Regression**. The goal is to predict the precise real-world location (Latitude, Longitude) of a photo taken within the university campus, utilizing only visual features.
-
-
-## The model 
-processes a 224x224 image through a ResNet50 backbone injected with Spatial Dropout layers, branching into three task-specific heads:
-Regression Head (MSE): Predicts the precise $(x, y)$ coordinates.
-Classification Head (Cross-Entropy): Classifies the image into one of 300 Smart Zones (generated via K-Means) to provide global context.
-Embedding Head (Triplet Loss): Learns a metric space where visually similar but geographically distant locations (aliasing) are pushed apart using Hard Negative Mining.
 
 ###  The model 
 The model processes a standard $224 \times 224$ input image through a **ResNet50 backbone**, which we fine-tuned and injected with **Spatial Dropout** layers to enhance feature robustness. The extracted feature vector branches into three parallel, task-specific heads:
@@ -37,7 +30,7 @@ The model processes a standard $224 \times 224$ input image through a **ResNet50
     Extracts compact embeddings that serve as input for the **Triplet Loss**. We use **Hard Negative Mining** on these embeddings to separate confusing scenes that look alike but are far apart.
 ---
 
-## 📥 Data & Model Setup (Crucial Step)
+## Data & Model Setup 
 Due to file size limits, the dataset and model weights are hosted on Google Drive. 
 **You must download and place them correctly for the code to run.**
 
@@ -61,15 +54,31 @@ This version includes the processed CSV (has image_name, lat, lon, utm_x, utm_y,
     3. Place the `gt.csv` file inside `data/`.
     4. **Status:** You can run `python train.py` immediately.
 
-#### Option B: Raw Data (Submission Format)
-This is the original dataset format as required by the submission guidelines, and this version includes the CSV as required( has image_name, lat, lon)
+
+#### 🟠 Option B: Raw Data (Submission Format)
+This option follows the strict submission guidelines but requires an additional preprocessing step before training.
 
 * **Link:** [INSERT_LINK_TO_RAW_DATA_ZIP]
-* **Action:**
-    1. Download and unzip to `data/raw/`.
-    2. **Preprocessing Required:** You must run the preprocessing script to generate the smart zones and handle GPS noise before training.
+* **Structure:**
+    1. Download and unzip the data into `data/raw/`.
+    2. **Run Preprocessing:** Execute the following script to denoise GPS labels and generate Smart Zones:
+    
     ```bash
-    python preprocess.py  # Generates a new preprocessed folder with the processed photos and the newly updated CSV
+    python preprocess.py
+    ```
+    
+    > **Output:** This script creates a new folder named `processed_data/` containing:
+    > * `images/` (Optimized images)
+    > * `gt.csv` (Updated Ground Truth with "Smart Zone" labels)
+
+    3. **Final Setup:** To use this data for training, simply move the contents of `processed_data/` into the main `data/` folder:
+    
+    ```bash
+    # Linux / Mac
+    mv processed_data/* data/
+    
+    # Windows (PowerShell)
+    Move-Item -Path "processed_data\*" -Destination "data\" -Force
     ```
 
 **Final Project Structure:**
@@ -87,7 +96,7 @@ Campus_GPS_Project/
 ```
 
 
-## 🛠️ Environment Setup
+## Environment Setup
 To replicate our results, please strictly follow these steps to create a clean Conda environment with the required dependencies (including `utm` and `pillow-heif`).
 
 ```bash
@@ -102,7 +111,7 @@ pip install -r requirements.txt
 ```
 ---
 
-### 🚀 How to Run
+### How to Run
 #### 1. Training To train the model from scratch (ensure you followed "Data Setup Option A"):
 ``` bash
  python train.py
