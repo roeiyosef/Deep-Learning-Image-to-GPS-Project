@@ -71,7 +71,7 @@ Campus_GPS_Project/
     └── gt.csv              <-- Downloaded/Generated CSV
 ```
 
-
+---
 ## 🛠️ Environment SetupTo replicate our results, please strictly follow these steps to create a clean Conda environment with the required dependencies (including utm and pillow-heif).Bash# 1. Create a clean environment with Python 3.9
 conda create -n gps_project python=3.9 -y
 
@@ -84,8 +84,9 @@ pip install -r requirements.txt
 # 4. Sanity Check (Optional)
 python -c "import utm; import pillow_heif; print('✅ Setup Complete!')"
 
-
-## 🧠 The "Trinity" ArchitectureThe model processes a 224x224 image through a ResNet50 backbone injected with Spatial Dropout layers, branching into three task-specific heads:Regression Head (MSE): Predicts the precise $(x, y)$ coordinates.Classification Head (Cross-Entropy): Classifies the image into one of 300 Smart Zones (generated via K-Means) to provide global context.Embedding Head (Triplet Loss): Learns a metric space where visually similar but geographically distant locations (aliasing) are pushed apart using Hard Negative Mining.🚀 How to Run1. TrainingTo train the model from scratch (ensure you followed "Data Setup Option A"):Bashpython train.py
+---
+## 🧠 The "Trinity" ArchitectureThe model 
+processes a 224x224 image through a ResNet50 backbone injected with Spatial Dropout layers, branching into three task-specific heads:Regression Head (MSE): Predicts the precise $(x, y)$ coordinates.Classification Head (Cross-Entropy): Classifies the image into one of 300 Smart Zones (generated via K-Means) to provide global context.Embedding Head (Triplet Loss): Learns a metric space where visually similar but geographically distant locations (aliasing) are pushed apart using Hard Negative Mining.🚀 How to Run1. TrainingTo train the model from scratch (ensure you followed "Data Setup Option A"):Bashpython train.py
 Note: The script automatically handles weighted sampling, data loading, and validation checks.2. Inference (Evaluation)We provide a standalone function predict_gps that accepts a numpy array image and returns coordinates.Example usage (Python):Pythonimport numpy as np
 from PIL import Image
 from predict import predict_gps
@@ -99,5 +100,8 @@ image = np.array(Image.open(img_path))
 coords = predict_gps(image)
 
 print(f"Predicted Location: {coords}")
+
+---
+
 Quick Sanity Check:Run our built-in test script to verify the model and environment:Bashpython check_submission.py
 📊 Results & AnalysisBest Validation Error: 8.68m (Epoch 127).Robustness: The model successfully handles night scenes and visual aliasing thanks to the Hard Negative Mining strategy.Error Distribution Map Blue dots: Ground Truth | Gray dots: Predictions | Red lines: Error vectors.(See full report for visualization)
