@@ -38,7 +38,7 @@ Due to file size limits, the dataset and model weights are hosted on Google Driv
 Required for `predict.py` and `check_submission.py`.
 
 * **Download:** `best_model.pth`
-* **Link:** [INSERT_LINK_TO_BEST_MODEL_PTH]
+* **Link:** [[INSERT_LINK_TO_BEST_MODEL_PTH](https://drive.google.com/drive/folders/1coLbUx7p2hFw4UZMvxBfIAboYlB05_eS?usp=drive_link)]
 * **Action:** Place the file in the **root directory** of the project (next to `predict.py`).
 
 ### 2. Download Dataset
