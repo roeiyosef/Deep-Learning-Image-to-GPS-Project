@@ -49,7 +49,7 @@ We provide two options. **Option A is recommended** for immediate reproduction o
 #### Option A: Preprocessed Data (Ready to Train)
 This version includes an images folder with the original images resized to 224*224 and contains the processed CSV (has image_name, lat, lon, utm_x, utm_y, is_night, label)
 
-* **Link:** [INSERT_LINK_TO_PROCESSED_DATA_ZIP]
+* **Link:** [[The Processed Data Set](https://drive.google.com/drive/folders/1Kq7Ayw_wHN87g3pYkHeGzvK-8FJ_owhN?usp=drive_link)]
 * **Action:**
     1. Download and unzip, this folder will contain an images folder and a gt.csv.
     2 Place the `images` folder inside `data/`.
@@ -57,10 +57,10 @@ This version includes an images folder with the original images resized to 224*2
     4. **Status:** You can run `python train.py` immediately.
 
 
-#### 🟠 Option B: Raw Data (Submission Format)
+#### Option B: Raw Data (Submission Format)
 This option follows the strict submission guidelines but requires an additional preprocessing step before training.
 
-* **Link:** [INSERT_LINK_TO_RAW_DATA_ZIP]
+* **Link:** [[The Raw Data Set](https://drive.google.com/drive/folders/1O-ko68q_HwfM6jSCrP1Iz7QGiOpMnJp_?usp=drive_link)]
 * **Structure:**
     1. Download and unzip the data into the project folder.
     2. **Run Preprocessing:** Execute the following script to denoise GPS labels and generate Smart Zones:
