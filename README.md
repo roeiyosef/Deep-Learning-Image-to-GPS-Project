@@ -35,11 +35,11 @@ Due to file size limits, the dataset and model weights are hosted on Google Driv
 **You must download and place them correctly for the code to run.**
 
 ### 1. Download Model Weights
-Required for `predict.py` and `check_submission.py`.
+Required for `predict.py`.
 
 * **Download:** `best_model.pth`
 * **Link:** [[Our Best Model](https://drive.google.com/drive/folders/1coLbUx7p2hFw4UZMvxBfIAboYlB05_eS?usp=drive_link)]
-* **Action:** Place the file in the **root directory** of the project (next to `predict.py`).
+* **Action:** Place the file in the **root directory** of the project.
 
 ### 2. Download Dataset
 First, in the Project Folder, there is an empty folder called Data. this folder should include the images folder and the CSV.
@@ -87,7 +87,7 @@ Campus_GPS_Project/
 ├── requirements.txt
 └── data/
     ├── images/             <-- Images
-    └── gt.csv              <-- Downloaded/Generated CSV
+    └── gt.csv              <-- CSV
 ```
 
 
