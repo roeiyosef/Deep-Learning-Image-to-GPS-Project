@@ -42,7 +42,7 @@ Required for `predict.py`.
 * **Action:** Place the file in the **root directory** of the project.
 
 ### 2. Download Dataset
-First, in the Project Folder, there is an empty folder called Data. this folder should include the images folder and the CSV.
+First, in the Project Folder, Create an empty folder called data. this folder should include the images folder and the CSV.
 
 We provide two options. **Option A is recommended** for immediate reproduction of training.
 
