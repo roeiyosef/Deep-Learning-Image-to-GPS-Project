@@ -1,5 +1,6 @@
 
 import os
+from matplotlib.lines import Line2D
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -39,6 +40,24 @@ GAMMA = 10.0  # Triplet
 
 torch.manual_seed(0)
 np.random.seed(0)
+
+#This is what w used to calculate the Campus Mean and Std
+def get_mean_and_std(loader):
+    mean = 0.
+    std = 0.
+    total_images = 0
+    for images, _ in loader:
+        batch_samples = images.size(0)
+        images = images.view(batch_samples, images.size(1), -1)
+        mean += images.mean(2).sum(0)
+        std += images.std(2).sum(0)
+        total_images += batch_samples
+
+    mean /= total_images
+    std /= total_images
+    return mean.tolist(), std.tolist()
+
+
 
 class DualViewDataset(Dataset):
     def __init__(self, dataframe, weak_transform, strong_transform=None, is_validation=False):
@@ -117,6 +136,102 @@ def get_transforms():
     
     return regular,weak, strong
 
+def evaluate_and_plot_localization_error(model, val_loader):
+    """
+    Runs inference, denormalizes coordinates, calculates errors, 
+    plots results AND saves the plot to an image file.
+    """
+    model.eval()
+    preds_list = []
+    actuals_list = []
+    GPS_CENTER = np.array([CENTER_X,CENTER_Y])
+
+
+    print("Running inference on validation set:")
+
+    with torch.no_grad():
+        for imgs, gps_targets in tqdm(val_loader, desc="Inference"):
+            imgs = imgs.to(DEVICE)
+            
+            preds = model(imgs)
+            
+            if isinstance(preds, tuple):
+                preds = preds[0]
+
+            preds_list.append(preds.cpu().numpy())
+            actuals_list.append(gps_targets.numpy())
+
+    # Concatenate all batches
+    all_preds = np.concatenate(preds_list, axis=0)
+    all_actuals = np.concatenate(actuals_list, axis=0)
+
+    # De-normalization: (Value * Scale) + Center
+    all_preds_denorm = (all_preds * GPS_SCALE) + GPS_CENTER
+    all_actuals_denorm = (all_actuals * GPS_SCALE) + GPS_CENTER
+
+    # Calculate Euclidean Errors (L2 Norm)
+    errors = np.linalg.norm(all_actuals_denorm - all_preds_denorm, axis=1)
+
+    # Statistics
+    mean_error = np.mean(errors)
+    median_error = np.median(errors)
+    num_green = np.sum(errors < 5.0)
+    num_orange = np.sum((errors >= 5.0) & (errors < 15.0))
+    num_red = np.sum(errors >= 15.0)
+
+    print(f"\nEvaluation Complete.")
+    print(f"   Mean Error:   {mean_error:.2f}m")
+    print(f"   Median Error: {median_error:.2f}m")
+
+    # --- Plotting ---
+    plt.figure(figsize=(12, 10))
+
+    # A. Scatter Points
+    plt.scatter(all_actuals_denorm[:, 0], all_actuals_denorm[:, 1],
+                label='Ground Truth', color='blue', alpha=0.5, s=30, edgecolors='k', zorder=2)
+    plt.scatter(all_preds_denorm[:, 0], all_preds_denorm[:, 1],
+                label='Predicted', color='gray', alpha=0.5, s=20, zorder=1)
+
+    # B. Error Lines (Color coded)
+    for i in range(len(all_actuals_denorm)):
+        err = errors[i]
+        if err < 5.0:
+            color = 'green'; lw = 1.0; alpha = 0.4
+        elif err < 15.0:
+            color = 'orange'; lw = 1.5; alpha = 0.6
+        else:
+            color = 'red'; lw = 2.0; alpha = 0.8
+
+        plt.plot([all_actuals_denorm[i, 0], all_preds_denorm[i, 0]],
+                 [all_actuals_denorm[i, 1], all_preds_denorm[i, 1]],
+                 color=color, linewidth=lw, alpha=alpha, zorder=1)
+
+    # C. Legend
+    legend_elements = [
+        Line2D([0], [0], marker='o', color='w', label='Ground Truth',
+               markerfacecolor='blue', markersize=10, markeredgecolor='k', alpha=0.6),
+        Line2D([0], [0], marker='o', color='w', label='Predicted',
+               markerfacecolor='gray', markersize=8, alpha=0.6),
+        Line2D([0], [0], color='none', label=' '),
+        Line2D([0], [0], color='green', lw=2, label=f'Good (< 5m): {num_green}'),
+        Line2D([0], [0], color='orange', lw=2, label=f'Fair (5-15m): {num_orange}'),
+        Line2D([0], [0], color='red', lw=2, label=f'Poor (> 15m): {num_red}')
+    ]
+
+    plt.legend(handles=legend_elements, loc='upper right', framealpha=0.95, fontsize=11, title="Legend")
+    plt.title(f'Localization Error Analysis\nMean Error: {mean_error:.2f}m', fontsize=14, fontweight='bold')
+    plt.xlabel('UTM Easting (X)')
+    plt.ylabel('UTM Northing (Y)')
+    plt.grid(True, linestyle='--', alpha=0.5)
+    plt.axis('equal')
+    plt.tight_layout()
+    
+    print(f"Saving evaluation plot to: localization_error.png")
+    plt.savefig("localization_error.png", dpi=300) 
+    
+    plt.show()
+    plt.close()
+
 def plot_distance_history(history):
     plt.figure(figsize=(10, 6))
     plt.plot(history['train_dist'], label='Train Avg Distance (m)', color='blue', linestyle='--')
@@ -175,6 +290,19 @@ def train():
     train_loader = DataLoader(train_ds, BATCH_SIZE, sampler=sampler, num_workers=2)
     val_loader = DataLoader(val_ds, BATCH_SIZE, shuffle=False, num_workers=2)
    
+
+    #######################################################################################
+    #SHOULD YOU CHOOSE TO RECALCULATE THE CAMPUS MEAN AND STD , THIS IS WHERE YOU DO IT.
+    # temp_ds = DualViewDataset(train_df, weak_transform=transforms.Compose([
+    # transforms.ToTensor()]), is_validation=True)
+    # temp_loader = DataLoader(temp_ds, batch_size=64, shuffle=False)
+
+    # campus_mean, campus_std = get_mean_and_std(temp_loader)
+    # print(f"Calculated Mean: {campus_mean}")
+    # print(f"Calculated Std: {campus_std}")
+    ########################################################################################
+
+
     model = VPSModel(num_classes=300).to(DEVICE)
     
     optimizer = optim.AdamW(model.parameters(), lr=LR, weight_decay=WEIGHT_DECAY)
@@ -293,6 +421,7 @@ def train():
     print("Training Finished")
     print(f"The Best Model is with Validation avg distance of ({best_val_dist:.2f}m)")
     plot_distance_history(history)
+    evaluate_and_plot_localization_error(model, val_loader)
 
 if __name__ == "__main__":
     train()
