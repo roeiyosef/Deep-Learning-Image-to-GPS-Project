@@ -52,7 +52,7 @@ This version includes an images folder with the original images resized to 224*2
 * **Link:** [[The Processed Data Set](https://drive.google.com/drive/folders/1Kq7Ayw_wHN87g3pYkHeGzvK-8FJ_owhN?usp=drive_link)]
 * **Action:**
     1. Download and unzip, this folder will contain an images folder and a gt.csv.
-    2 Place the `images` folder inside `data/`.
+    2. Place the `images` folder inside `data/`.
     3. Place the `gt.csv` file inside `data/`.
     4. **Status:** You can run `python train.py` immediately.
 
