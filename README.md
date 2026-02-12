@@ -75,7 +75,7 @@ This option follows the strict submission guidelines but requires an additional 
 * **Link:** [[The Raw Data Set](https://drive.google.com/drive/folders/1O-ko68q_HwfM6jSCrP1Iz7QGiOpMnJp_?usp=drive_link)]
 * **Structure:**
     1. Download and unzip the data into the project folder.
-    2. **Run Preprocessing:** Execute the following script to denoise GPS labels and generate Smart Zones:
+    2. **Run Preprocessing:** 
     
     ```bash
     python preprocess.py
