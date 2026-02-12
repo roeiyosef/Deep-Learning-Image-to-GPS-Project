@@ -18,7 +18,7 @@ def calculate_gps_center(csv_path):
     Returns: center_x, center_y
     """
     if not os.path.exists(csv_path):
-        print(f"⚠️ Warning: File {csv_path} not found.")
+        print(f"Warning: File {csv_path} not found.")
         return 0, 0
 
     df = pd.read_csv(csv_path)
