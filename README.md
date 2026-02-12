@@ -34,14 +34,25 @@ The model processes a standard $224 \times 224$ input image through a **ResNet50
 Due to file size limits, the dataset and model weights are hosted on Google Drive. 
 **You must download and place them correctly for the code to run.**
 
-### 1. Download Model Weights
-Required for `predict.py`.
 
-* **Download:** `best_model.pth`
+## Data & Model Setup
+
+Due to file size limits, the dataset and model weights are hosted on Google Drive. You must download and place them correctly for the code to run.
+
+### 1. Download Model Weights (Required)
+Required to run `predict.py`.
+* **File:** `best_model.pth`
 * **Link:** [[Our Best Model](https://drive.google.com/drive/folders/1coLbUx7p2hFw4UZMvxBfIAboYlB05_eS?usp=drive_link)]
-* **Action:** Place the file in the **root directory** of the project.
+* **Action:** Download and place the file in the **root directory** of the project.
 
-### 2. Download Dataset
+### 2. Training Logs & Analysis Graphs (Optional)
+For a deeper dive into the training convergence and error analysis, we provide the raw logs and the plots.
+* **Contains:** `Logs.txt`, `training_plot.png`, `localization_error_map.png`
+* **Location:** Same Google Drive folder as the model.
+* **Usage:** Useful for verifying the results reported in the final report.
+* 
+
+### 3. Download Dataset
 First, in the Project Folder, Create an empty folder called data. this folder should include the images folder and the CSV.
 
 We provide two options. **Option A is recommended** for immediate reproduction of training.
