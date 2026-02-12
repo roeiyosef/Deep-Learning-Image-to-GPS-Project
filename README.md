@@ -16,7 +16,7 @@ We have deployed our model to **Hugging Face Spaces**. You can upload any image 
 ## Project Report
 A comprehensive report detailing our methodology, data curation process, architecture decisions (Trinity Network), and ablation studies.
 
-**[Download / View Full Report (PDF)]([LINK_TO_YOUR_PDF](https://drive.google.com/drive/folders/1smDMnyOkY3KIB0rvW5yR99osBQg9hY3B?usp=drive_link))**
+**[Download / View Full Report (PDF)](https://drive.google.com/drive/folders/1smDMnyOkY3KIB0rvW5yR99osBQg9hY3B?usp=drive_link)**
 
 ---
 ## Overview
