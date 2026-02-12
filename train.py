@@ -100,7 +100,6 @@ class DualViewDataset(Dataset):
 
         return img_anc, img_pos, gps, label
 
-# --- Hard Negative Mining ---
 def get_hard_negatives(embeddings, gps, safe_radius=0.2): 
     dist_emb = torch.cdist(embeddings, embeddings, p=2)
     dist_gps = torch.cdist(gps, gps, p=2)
@@ -161,18 +160,14 @@ def evaluate_and_plot_localization_error(model, val_loader):
             preds_list.append(preds.cpu().numpy())
             actuals_list.append(gps_targets.numpy())
 
-    # Concatenate all batches
     all_preds = np.concatenate(preds_list, axis=0)
     all_actuals = np.concatenate(actuals_list, axis=0)
 
-    # De-normalization: (Value * Scale) + Center
     all_preds_denorm = (all_preds * GPS_SCALE) + GPS_CENTER
     all_actuals_denorm = (all_actuals * GPS_SCALE) + GPS_CENTER
 
-    # Calculate Euclidean Errors (L2 Norm)
     errors = np.linalg.norm(all_actuals_denorm - all_preds_denorm, axis=1)
 
-    # Statistics
     mean_error = np.mean(errors)
     median_error = np.median(errors)
     num_green = np.sum(errors < 5.0)
@@ -183,16 +178,13 @@ def evaluate_and_plot_localization_error(model, val_loader):
     print(f"   Mean Error:   {mean_error:.2f}m")
     print(f"   Median Error: {median_error:.2f}m")
 
-    # --- Plotting ---
     plt.figure(figsize=(12, 10))
 
-    # A. Scatter Points
     plt.scatter(all_actuals_denorm[:, 0], all_actuals_denorm[:, 1],
                 label='Ground Truth', color='blue', alpha=0.5, s=30, edgecolors='k', zorder=2)
     plt.scatter(all_preds_denorm[:, 0], all_preds_denorm[:, 1],
                 label='Predicted', color='gray', alpha=0.5, s=20, zorder=1)
 
-    # B. Error Lines (Color coded)
     for i in range(len(all_actuals_denorm)):
         err = errors[i]
         if err < 5.0:
@@ -206,7 +198,6 @@ def evaluate_and_plot_localization_error(model, val_loader):
                  [all_actuals_denorm[i, 1], all_preds_denorm[i, 1]],
                  color=color, linewidth=lw, alpha=alpha, zorder=1)
 
-    # C. Legend
     legend_elements = [
         Line2D([0], [0], marker='o', color='w', label='Ground Truth',
                markerfacecolor='blue', markersize=10, markeredgecolor='k', alpha=0.6),
@@ -265,14 +256,11 @@ def train():
     
     train_df['group_id'] = train_df['label'].astype(str) + "_" + train_df['is_night'].astype(str)
 
-    # ספירה וחישוב משקולות
     group_counts = train_df['group_id'].value_counts()
     group_weights = 1.0 / group_counts
 
-    # מיפוי המשקל לכל שורה בדאטה
     sample_weights = train_df['group_id'].map(group_weights).values
 
-    # המרה לטנסור של PyTorch
     sampler = WeightedRandomSampler(
         weights=torch.from_numpy(sample_weights).double(),
         num_samples=len(train_df),
@@ -421,6 +409,8 @@ def train():
     print("Training Finished")
     print(f"The Best Model is with Validation avg distance of ({best_val_dist:.2f}m)")
     plot_distance_history(history)
+    print("Loading Best Model weights for evaluation")
+    model.load_state_dict(torch.load("best_model.pth"))
     evaluate_and_plot_localization_error(model, val_loader)
 
 if __name__ == "__main__":
