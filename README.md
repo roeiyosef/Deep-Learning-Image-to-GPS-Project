@@ -30,11 +30,6 @@ The model processes a standard $224 \times 224$ input image through a **ResNet50
     Extracts compact embeddings that serve as input for the **Triplet Loss**. We use **Hard Negative Mining** on these embeddings to separate confusing scenes that look alike but are far apart.
 ---
 
-## Data & Model Setup 
-Due to file size limits, the dataset and model weights are hosted on Google Drive. 
-**You must download and place them correctly for the code to run.**
-
-
 ## Data & Model Setup
 
 Due to file size limits, the dataset and model weights are hosted on Google Drive. You must download and place them correctly for the code to run.
