@@ -50,7 +50,8 @@ For a deeper dive into the training convergence and error analysis, we provide t
 * **Contains:** `Logs.txt`, `training_plot.png`, `localization_error_map.png`
 * **Location:** Same Google Drive folder as the model.
 * **Usage:** Useful for verifying the results reported in the final report.
-* 
+
+> **Note regarding retraining:** > If you choose to train the model from scratch (by running `train.py`), new plots will be generated in the project folder.
 
 ### 3. Download Dataset
 First, in the Project Folder, Create an empty folder called data. this folder should include the images folder and the CSV.
